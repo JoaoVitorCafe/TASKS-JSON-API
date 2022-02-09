@@ -6,7 +6,7 @@ This is suppose to be just a simple to-do list application
 
 ### Create JSON file (optional)
 If you want to test this API while it's not currently connected to a database yet , you can create a JSON file called ``` tasks.json``` where you will be able to handle the data.
-The ``` tasks.json``` must be an array that contains objects with the following keys : ``` id``` , ``` tasks``` and ``` due```
+The ``` tasks.json``` must be an array that contains objects with the following keys : ``` id``` , ``` task``` and ``` due```
 
 Recomendations :
 
