@@ -2,6 +2,10 @@ const express = require('express')
 const morgan = require('morgan')
 const taskRoute = require('./routes/taskRoute')
 
+// Create JSON file
+// Implement status on the tasks
+
+
 const port = process.env.PORT || 3000
 
 const app = express()
