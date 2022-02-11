@@ -3,9 +3,6 @@ const morgan = require('morgan')
 const cors = require('cors')
 const taskRoute = require('./routes/taskRoute')
 
-// Create JSON file
-// Implement status on the tasks
-
 const port = process.env.PORT || 3000
 
 const app = express()
@@ -17,4 +14,4 @@ app.use(morgan('dev'))
 
 app.use('/api/tasks' , taskRoute)
 
-app.listen(port , () => `Listening on port ${port}`)
+app.listen(port , () => console.log(`Listening on port ${port}`))

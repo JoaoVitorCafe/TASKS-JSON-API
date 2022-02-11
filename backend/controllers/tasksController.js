@@ -1,64 +1,79 @@
 const path = require('path')
-const pathToData = path.join(__dirname, '../tasks.json')
-
 const fs = require('fs')
+const handleJSON = require('../handleJSON/handleJSON')
+
+const pathToData = path.join(__dirname, '../tasks.json')
 
 module.exports = {
     getTask(req ,res) {
+        handleJSON.check()
         const { id } = req.params
-        fs.readFile(pathToData , (err ,data) => {
-            const tasks = JSON.parse(data)
-            const task = tasks.find(elem => elem.id === Number(id))
+        const task =  handleJSON.find(id)
+
+        if(!task)
+            res.status(404).json("Task not found")
             
-            if(!task)
-                res.status(404).json("Task not found")
-            
-            res.status(200).json(task)
-        })
+        res.status(200).json(task)
     }, 
     
     getTasks(req ,res){
-        fs.readFile(pathToData , (err ,data) => {
-            const tasks = JSON.parse(data)
-            res.status(200).json(tasks)
-        })
+        handleJSON.check()
+        const tasks = handleJSON.send()
+        
+        res.status(200).json(tasks)
     } , 
 
     createTask(req ,res){
-        fs.readFile(pathToData , (err ,data) => {
-            const newTask = {id :Number(req.body.id) , task : req.body.task , due : req.body.due}
-            const tasks = JSON.parse(data)
-            tasks.push(newTask)
-            fs.writeFileSync(pathToData , JSON.stringify(tasks) , 'utf-8')
-            res.status(201).json(newTask)
-        })
+        handleJSON.check()
+        const {description , due} = req.body
+
+        if(!description || !due)
+            res.status(401).send({message : "Fill in all fields"})
+        
+        const newTask = {id : handleJSON.identify() , description , due , status : "In progress"}
+        const tasks = handleJSON.send()
+        tasks.push(newTask)
+        fs.writeFileSync(pathToData , JSON.stringify(tasks) , 'utf-8')
+        res.status(201).json(newTask)
+        
     } ,
 
     updateTask(req ,res){
-        fs.readFile(pathToData , (err ,data) => {
-            const tasks = JSON.parse(data)
-            let task = tasks.find(elem => elem.id === Number(req.params.id))
-            const index = tasks.indexOf(task)
-            const updatedTask = {...task , id : req.body.id , task : req.body.task , due : req.body.due}
+            handleJSON.check()
+            const { id } = req.params
+            const tasks = handleJSON.send()
+            let task = handleJSON.find(id)
+
+            if(!task)
+                res.status(401).send({message : "Task not found"})
+
+            const { description , due} = req.body
+
+            const index = tasks.findIndex(task => task.id === id)
+
+            const updatedTask = {...task , description,  due}
+
             tasks[index] = updatedTask
             fs.writeFileSync(pathToData , JSON.stringify(tasks) , 'utf-8')
         
             res.status(200).send(updatedTask)
 
-        })
-    },
+        },
 
     deleteTask(req ,res){
-        fs.readFile(pathToData , (err ,data) => {
-            const tasks = JSON.parse(data)
-            let deletedTask = tasks.find(elem => elem.id === Number(req.params.id))
-            const index = tasks.indexOf(deletedTask)
-            tasks.splice(index , 1)
-            fs.writeFileSync(pathToData , JSON.stringify(tasks) , 'utf-8')
+        handleJSON.check()
+        const { id } = req.params
+        const tasks = handleJSON.send()
+        const task = handleJSON.find(id)
         
-            res.status(200).send(deletedTask)
+        if(!task)
+            res.status(404).send({message : "Task not found"})
 
-        })
-
+            const index = tasks.findIndex(task => task.id === id)
+       
+        const deletedTask = tasks.splice(index , 1)[0]
+        fs.writeFileSync(pathToData , JSON.stringify(tasks) , 'utf-8')
+        
+        res.status(200).send(deletedTask)
     }
 }

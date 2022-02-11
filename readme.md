@@ -4,18 +4,24 @@ This is suppose to be just a simple to-do list application
 
 ## Usage
 
-### Create JSON file (optional)
-If you want to test this API while it's not currently connected to a database yet , you can create a JSON file called ``` tasks.json``` where you will be able to handle the data.
-The ``` tasks.json``` must be an array that contains objects with the following keys : ``` id``` , ``` task``` and ``` due```
+### JSON file
+- If you want to test this API while it's not currently connected to a database yet, you can modify and append some data manually to a file called ``` tasks.json``` or by POST requests.
+
+- The file will be created automatically when you start the server.
+
+- The ``` tasks.json``` must have an array that contains objects with the following keys : ``` descriptions```  and  ``` due```.
+
+- Do not delete all the content present in ``` tasks.json```. In order to this API to work this file must have at least an empty array.
 
 Recomendations :
 
 ```
 [
-    {"id": 1 ,"task":"Wash dishes" , "due":"Sunday"},
-    {"id": 2 ,"task":"Take trash out" , "due":"Thursday"},
-    {"id": 3 ,"task":"Clean room" , "due":"Wednesday"},
-    {"id": 4 ,"task":"Wash clothes" , "due":"Saturday"}
+  { "id": "bznvytiv", "description": "Wash dishes", "due": "Tonight", "status": "In progress" },
+  {"id": "dl8wxlaz", "description": "Take trash out", "due": "Tomorrow", "status": "In progress"},
+  {"id": "cucpbdn4", "description": "Clean Room", "due": "Sunday", "status": "In progress" },
+  {"id": "g2yxyogi", "description": "Do math exercises", "due": "Tuesday", "status": "In progress"},
+  {"id": "fdsfjhl6", "description": "Programming", "due": "Everyday","status": "In progress"}
 ]
 ```
 
@@ -35,5 +41,5 @@ npm start
 
 ### Observations
 ```
-Application is obviously not completed and not ready to use
+Maybe in the future , this API can be connected to a database.
 ```
