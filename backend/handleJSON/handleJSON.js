@@ -1,32 +1,36 @@
-const path = require('path')
 const fs = require('fs')
-
-const pathToData = path.join(__dirname, '../tasks.json')
+const jwt = require('jsonwebtoken')
 
 module.exports = {
     // Check if a JSONfile exists , if not create
-    check(){
+    check(pathTo){
          
-        if (!(fs.existsSync(pathToData))) {
-            fs.writeFileSync(pathToData , JSON.stringify([]))
+        if (!(fs.existsSync(pathTo))) {
+            fs.writeFileSync(pathTo , JSON.stringify([]))
         }
     },
 
-    send() {
-        const tasks = JSON.parse(fs.readFileSync(pathToData ,'utf-8'))
-        return tasks
+    get(pathTo) {
+        const data = JSON.parse(fs.readFileSync(pathTo ,'utf-8'))
+        return data
     },
 
-    find(id) {
-        const tasks = JSON.parse(fs.readFileSync(pathToData ,'utf-8'))
-        const task = tasks.find(task => task.id === id)
-        return task
-        
+    find(pathTo , parameter) {
+        const data = JSON.parse(fs.readFileSync(pathTo ,'utf-8'))
+        const specificData = data.find(elem => elem.parameter === parameter)
+        return specificData  
     } ,
 
-    identify(){
+
+    generateID(){
         const id = Math.floor(Date.now() * Math.random()).toString(36)
         return id
+    } ,
+
+    generateToken(id){
+        return jwt.sign({ id } , process.env.JWT_SECRET , {
+            expiresIn : '30d'
+        })
     }
 
 }

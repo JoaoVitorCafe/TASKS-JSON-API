@@ -6,9 +6,9 @@ const pathToData = path.join(__dirname, '../tasks.json')
 
 module.exports = {
     getTask(req ,res) {
-        handleJSON.check()
+        handleJSON.check(pathToData)
         const { id } = req.params
-        const task =  handleJSON.find(id)
+        const task =  handleJSON.find( pathToData,id)
 
         if(!task)
             res.status(404).json("Task not found")
@@ -17,21 +17,21 @@ module.exports = {
     }, 
     
     getTasks(req ,res){
-        handleJSON.check()
-        const tasks = handleJSON.send()
+        handleJSON.check(pathToData)
+        const tasks = handleJSON.get(pathToData)
         
         res.status(200).json(tasks)
     } , 
 
     createTask(req ,res){
-        handleJSON.check()
+        handleJSON.check(pathToData)
         const {description , due} = req.body
 
         if(!description || !due)
-            res.status(401).send({message : "Fill in all fields"})
+            res.status(400).send({message : "Fill in all fields"})
         
-        const newTask = {id : handleJSON.identify() , description , due , status : "In progress"}
-        const tasks = handleJSON.send()
+        const newTask = {id : handleJSON.generateID() , description , due , status : "In progress"}
+        const tasks = handleJSON.get(pathToData)
         tasks.push(newTask)
         fs.writeFileSync(pathToData , JSON.stringify(tasks) , 'utf-8')
         res.status(201).json(newTask)
@@ -39,13 +39,13 @@ module.exports = {
     } ,
 
     updateTask(req ,res){
-            handleJSON.check()
+            handleJSON.check(pathToData)
             const { id } = req.params
-            const tasks = handleJSON.send()
-            let task = handleJSON.find(id)
+            const tasks = handleJSON.get(pathToData)
+            let task = handleJSON.find(pathToData,id)
 
             if(!task)
-                res.status(401).send({message : "Task not found"})
+                res.status(400).send({message : "Task not found"})
 
             const { description , due} = req.body
 
@@ -61,10 +61,10 @@ module.exports = {
         },
 
     deleteTask(req ,res){
-        handleJSON.check()
+        handleJSON.check(pathToData)
         const { id } = req.params
-        const tasks = handleJSON.send()
-        const task = handleJSON.find(id)
+        const tasks = handleJSON.get(pathToData)
+        const task = handleJSON.find(pathToData , id)
         
         if(!task)
             res.status(404).send({message : "Task not found"})
