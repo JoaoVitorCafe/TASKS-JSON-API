@@ -15,12 +15,17 @@ module.exports = {
         return data
     },
 
-    find(pathTo , parameter) {
+    findByID(pathTo , id) {
         const data = JSON.parse(fs.readFileSync(pathTo ,'utf-8'))
-        const specificData = data.find(elem => elem.parameter === parameter)
+        const specificData = data.find(elem => elem.id === id)
         return specificData  
     } ,
 
+    findByEmail(pathTo , email) {
+        const data = JSON.parse(fs.readFileSync(pathTo ,'utf-8'))
+        const specificData = data.find(elem => elem.email === email)
+        return specificData  
+    } ,
 
     generateID(){
         const id = Math.floor(Date.now() * Math.random()).toString(36)

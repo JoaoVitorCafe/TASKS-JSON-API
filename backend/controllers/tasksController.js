@@ -8,7 +8,7 @@ module.exports = {
     getTask(req ,res) {
         handleJSON.check(pathToData)
         const { id } = req.params
-        const task =  handleJSON.find( pathToData,id)
+        const task =  handleJSON.findByID( pathToData, id)
 
         if(!task)
             res.status(404).json("Task not found")
@@ -39,37 +39,31 @@ module.exports = {
     } ,
 
     updateTask(req ,res){
-            handleJSON.check(pathToData)
-            const { id } = req.params
-            const tasks = handleJSON.get(pathToData)
-            let task = handleJSON.find(pathToData,id)
-
-            if(!task)
-                res.status(400).send({message : "Task not found"})
-
-            const { description , due} = req.body
-
-            const index = tasks.findIndex(task => task.id === id)
-
-            const updatedTask = {...task , description,  due}
-
-            tasks[index] = updatedTask
-            fs.writeFileSync(pathToData , JSON.stringify(tasks) , 'utf-8')
-        
-            res.status(200).send(updatedTask)
-
+        handleJSON.check(pathToData)
+        const { id } = req.params
+        const tasks = handleJSON.get(pathToData)
+        let task = handleJSON.findByID(pathToData,id)
+        if(!task)
+            res.status(400).send({message : "Task not found"})
+        const { description , due} = req.body
+        const index = tasks.findIndex(task => task.id === id)
+        const updatedTask = {...task , description,  due}
+        tasks[index] = updatedTask
+        fs.writeFileSync(pathToData , JSON.stringify(tasks) , 'utf-8')
+    
+        res.status(200).send(updatedTask)
         },
 
     deleteTask(req ,res){
         handleJSON.check(pathToData)
         const { id } = req.params
         const tasks = handleJSON.get(pathToData)
-        const task = handleJSON.find(pathToData , id)
+        const task = handleJSON.findByID(pathToData , id)
         
         if(!task)
             res.status(404).send({message : "Task not found"})
 
-            const index = tasks.findIndex(task => task.id === id)
+        const index = tasks.findIndex(task => task.id === id)
        
         const deletedTask = tasks.splice(index , 1)[0]
         fs.writeFileSync(pathToData , JSON.stringify(tasks) , 'utf-8')

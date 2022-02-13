@@ -12,7 +12,7 @@ module.exports = {
         if(!name || !email || !password)
             res.status(400).send({message : "Please add all fields"})
 
-        const userExists = handleJSON.find(pathToUsers , email)
+        const userExists = handleJSON.findByEmail(pathToUsers , email)
 
         if(userExists)
             res.status(400).send({message : "User already exists"})
@@ -38,16 +38,18 @@ module.exports = {
         if(!email || !password)
             res.status(400).send({message : "Please add all fields"})
 
-        const user = handleJSON.find(pathToUsers , email)
+        const user = handleJSON.findByEmail(pathToUsers , email)
 
-        if(user && (user.password == password))
+        if(user && (user.password == password)) {
             res.status(200).json({...user , token : handleJSON.generateToken(user.id)})
-    
-        res.status(401).send({message : "Email or password incorrect"})
+        } else {
+            res.status(400).send({message : "Email or password incorrect"})
+        }
+            
     } ,
 
     getUser(req , res) {
-        const {id, name , email} = handleJSON.find(req.user.id) 
+        const {id, name , email} = handleJSON.findByID(req.user.id) 
 
         res.status(200).json({
             id,
