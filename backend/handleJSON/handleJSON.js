@@ -31,11 +31,4 @@ module.exports = {
         const id = Math.floor(Date.now() * Math.random()).toString(36)
         return id
     } ,
-
-    generateToken(id){
-        return jwt.sign({ id } , process.env.JWT_SECRET , {
-            expiresIn : '30d'
-        })
-    }
-
 }

@@ -3,6 +3,12 @@ const path = require('path')
 const handleJSON = require('../handleJSON/handleJSON')
 const pathToUsers = path.join(__dirname , '../users.json')
 
+const generateToken = (id) =>  {
+    return jwt.sign({ id } , process.env.JWT_SECRET , {
+        expiresIn : '30d'
+    })
+}
+
 const protect = (req , res , next) => {
     let token 
 
@@ -33,4 +39,4 @@ const protect = (req , res , next) => {
 
 }
 
-module.exports = {protect}
+module.exports = {protect , generateToken}

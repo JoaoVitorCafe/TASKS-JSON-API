@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const handleJSON = require('../handleJSON/handleJSON')
 const pathToUsers = path.join(__dirname , '../users.json')
+const { generateToken} = require('../middleware/authMiddleware') 
 
 module.exports = {
     registerUser(req , res) {
@@ -31,7 +32,7 @@ module.exports = {
         users.push(user)
 
         fs.writeFileSync(pathToUsers , JSON.stringify(users) , 'utf-8')
-        res.status(201).json({...user , token : handleJSON.generateToken(user.id)})
+        res.status(201).json({...user , token : generateToken(user.id)})
     } ,
 
     loginUser(req , res) {
@@ -45,20 +46,17 @@ module.exports = {
         }
 
         const user = handleJSON.findByEmail(pathToUsers , email)
-
+        // put the generateToken inside another file , i really thing it's better
         if(user && (user.password == password)) {
-            res.status(200).json({...user , token : handleJSON.generateToken(user.id)})
+            res.status(200).json({...user , token : generateToken(user.id)})
         } else {
             res.status(400)
             throw new Error("Email or password incorrect")
         }     
     } ,
 
-    getUser(req , res) {
-        console.log("Get to getUser")
-        
+    getUser(req , res) {  
         const {id, name , email} = handleJSON.findByID(pathToUsers ,req.user.id) 
-
 
         res.status(200).json({
             id,

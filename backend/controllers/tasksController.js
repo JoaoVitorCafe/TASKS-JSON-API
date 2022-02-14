@@ -10,6 +10,11 @@ module.exports = {
         const { id } = req.params
         const task =  handleJSON.findByID( pathToData, id)
 
+        if(task.user !== req.user.id){
+            res.status(401)
+            throw new Error("You're not authorized to get this task")
+        }
+
         if(!task) {
             res.status(404)
             throw new Error("Task not found")
@@ -21,8 +26,10 @@ module.exports = {
     getTasks(req ,res){
         handleJSON.check(pathToData)
         const tasks = handleJSON.get(pathToData)
+
+        const tasksUser = tasks.filter(task => task.user === req.user.id)
         
-        res.status(200).json(tasks)
+        res.status(200).json(tasksUser)
     } , 
 
     createTask(req ,res){
@@ -52,6 +59,12 @@ module.exports = {
             res.status(404)
             throw new Error("Task not found")
         }
+
+        if(task.user !== req.user.id) {
+            res.status(401)
+            throw new Error("You're unauthorized to update this task")
+        }
+
         
         const { description , due} = req.body
         const index = tasks.findIndex(task => task.id === id)
@@ -73,6 +86,11 @@ module.exports = {
             throw new Error("Task not found")
         }
 
+        if(task.user !== req.user.id) {
+            res.status(401)
+            throw new Error("You're unauthorized to update this task")
+        }
+        
         const index = tasks.findIndex(task => task.id === id)
        
         const deletedTask = tasks.splice(index , 1)[0]
