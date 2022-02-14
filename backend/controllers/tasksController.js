@@ -10,8 +10,10 @@ module.exports = {
         const { id } = req.params
         const task =  handleJSON.findByID( pathToData, id)
 
-        if(!task)
-            res.status(404).json("Task not found")
+        if(!task) {
+            res.status(404)
+            throw new Error("Task not found")
+        }
             
         res.status(200).json(task)
     }, 
@@ -27,10 +29,12 @@ module.exports = {
         handleJSON.check(pathToData)
         const {description , due} = req.body
 
-        if(!description || !due)
-            res.status(400).send({message : "Fill in all fields"})
+        if(!description || !due) {
+            res.status(400)
+            throw new Error("Fill in all fields")
+        }
         
-        const newTask = {id : handleJSON.generateID() , description , due , status : "In progress"}
+        const newTask = {user : req.user.id , id : handleJSON.generateID() , description , due , status : "In progress"}
         const tasks = handleJSON.get(pathToData)
         tasks.push(newTask)
         fs.writeFileSync(pathToData , JSON.stringify(tasks) , 'utf-8')
@@ -43,8 +47,12 @@ module.exports = {
         const { id } = req.params
         const tasks = handleJSON.get(pathToData)
         let task = handleJSON.findByID(pathToData,id)
-        if(!task)
-            res.status(400).send({message : "Task not found"})
+        
+        if(!task) {
+            res.status(404)
+            throw new Error("Task not found")
+        }
+        
         const { description , due} = req.body
         const index = tasks.findIndex(task => task.id === id)
         const updatedTask = {...task , description,  due}
@@ -60,8 +68,10 @@ module.exports = {
         const tasks = handleJSON.get(pathToData)
         const task = handleJSON.findByID(pathToData , id)
         
-        if(!task)
-            res.status(404).send({message : "Task not found"})
+        if(!task) {
+            res.status(404)
+            throw new Error("Task not found")
+        }
 
         const index = tasks.findIndex(task => task.id === id)
        
