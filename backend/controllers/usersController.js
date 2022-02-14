@@ -5,6 +5,10 @@ const pathToUsers = path.join(__dirname , '../users.json')
 const { generateToken} = require('../middleware/authMiddleware') 
 
 module.exports = {
+    
+    // @desc    Register new user
+    // @route   POST /api/users/register
+    // @acess   Public
     registerUser(req , res) {
         handleJSON.check(pathToUsers)
 
@@ -35,6 +39,9 @@ module.exports = {
         res.status(201).json({...user , token : generateToken(user.id)})
     } ,
 
+    // @desc    Authenticate a user
+    // @route   POST /api/users/login
+    // @acess   Public
     loginUser(req , res) {
         handleJSON.check(pathToUsers)
 
@@ -55,6 +62,9 @@ module.exports = {
         }     
     } ,
 
+    // @desc    Get data from the authenticated user
+    // @route   GET /api/users/user
+    // @acess   Public
     getUser(req , res) {  
         const {id, name , email} = handleJSON.findByID(pathToUsers ,req.user.id) 
 

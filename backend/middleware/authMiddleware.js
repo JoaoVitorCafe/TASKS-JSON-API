@@ -3,6 +3,7 @@ const path = require('path')
 const handleJSON = require('../handleJSON/handleJSON')
 const pathToUsers = path.join(__dirname , '../users.json')
 
+// Generate JSON Web Token
 const generateToken = (id) =>  {
     return jwt.sign({ id } , process.env.JWT_SECRET , {
         expiresIn : '30d'
@@ -14,10 +15,13 @@ const protect = (req , res , next) => {
 
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         try{
+            // Get token from header
             token = req.headers.authorization.split(' ')[1]
 
+            // Verify token
             const decoded = jwt.verify(token , process.env.JWT_SECRET)
 
+            // Get user from the token
             const user = handleJSON.findByID(pathToUsers , decoded.id)
             
             delete user.password

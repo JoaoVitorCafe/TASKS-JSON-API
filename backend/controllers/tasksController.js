@@ -5,6 +5,10 @@ const handleJSON = require('../handleJSON/handleJSON')
 const pathToData = path.join(__dirname, '../tasks.json')
 
 module.exports = {
+    
+    // @desc    Get a specific task
+    // @route   GET /api/tasks/:id
+    // @acess   Private
     getTask(req ,res) {
         handleJSON.check(pathToData)
         const { id } = req.params
@@ -23,6 +27,9 @@ module.exports = {
         res.status(200).json(task)
     }, 
     
+    // @desc    Get all tasks from the user logged
+    // @route   GET /api/tasks/
+    // @acess   Private
     getTasks(req ,res){
         handleJSON.check(pathToData)
         const tasks = handleJSON.get(pathToData)
@@ -32,6 +39,9 @@ module.exports = {
         res.status(200).json(tasksUser)
     } , 
 
+    // @desc    Create a task 
+    // @route   POST /api/tasks/
+    // @acess   Private
     createTask(req ,res){
         handleJSON.check(pathToData)
         const {description , due} = req.body
@@ -49,6 +59,9 @@ module.exports = {
         
     } ,
 
+    // @desc    Update a task 
+    // @route   PUT /api/tasks/:id
+    // @acess   Private
     updateTask(req ,res){
         handleJSON.check(pathToData)
         const { id } = req.params
@@ -75,6 +88,9 @@ module.exports = {
         res.status(200).send(updatedTask)
         },
 
+    // @desc    Delete a task 
+    // @route   DELETE /api/tasks/:id
+    // @acess   Private
     deleteTask(req ,res){
         handleJSON.check(pathToData)
         const { id } = req.params
