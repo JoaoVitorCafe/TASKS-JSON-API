@@ -45,8 +45,8 @@
   "description":"Programming",
   "due":"Monday",
   "status":"In progress"
-  },
-
+  }
+]
 ```
 - users.json
 ```
