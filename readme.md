@@ -1,8 +1,8 @@
-# Simple to-do list application
+# TASKS-JSON-API
 
-- This is suppose to be just a simple to-do list application.
+- This is suppose to be just a simple TASK JSON API.
 - The application currently consists only on the backend.
-- The app was made for the purpose of practicing some Javacript. I do not recommend using this app in your daily life.
+- The app was made for the purpose of practicing some Javacript.
 - Maybe in the future, a client side of the app can be developed. 
 - Feel free to propose a frontend application that can be useful for this application.
 
@@ -12,11 +12,11 @@
 
 ### JSON file
 
-- In this application , all the data is stored in JSON files
+- In this application , all the data is stored into JSON files
 - The tasks are located in the ``` tasks.json``` file
 - The users are located in the ``` users.json``` file
 - The file will be created automatically when you start the server.
-- Do not delete all the content present in ``` tasks.json```. In order to this API to work this file must have at least an empty array.
+- Do not delete all the content present in ``` tasks.json``` or ``` users.json``` . In order to the API to work both files must have at least an empty array.
 
 ### Structure of JSON files
 
@@ -68,9 +68,9 @@
 
 ### API
 
-The API is structered in certain folders.
+The API is structured in certain folders.
 
-- Controllers  - Implementation of endpoins
+- Controllers  - Implementation of endpoints
 
 - HandleJSON -  Handles the data in the JSON files
 
@@ -79,7 +79,15 @@ The API is structered in certain folders.
 - Routes - Declaration of endpoints
 
 ### Authentication
-- The authentication is based on JSON Web Tokens. So everytime you register a user or login, a token will be generated. This token will allow you to get informations about the own currently user and add tasks and manipulate them through requests.
+- The authentication is based on JSON Web Tokens. So everytime you register a user or login, a token will be generated. This token will allow you to:
+```
+Get informations about the own currently user
+```
+
+```
+Add tasks and manipulate them through requests. 
+```
+
 
 ### Scripts
 
