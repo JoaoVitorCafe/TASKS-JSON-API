@@ -10,7 +10,7 @@ const generateToken = (id) =>  {
     })
 }
 
-const protect = (req , res , next) => {
+const protect = async (req , res , next) => {
     let token 
 
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
@@ -22,7 +22,7 @@ const protect = (req , res , next) => {
             const decoded = jwt.verify(token , process.env.JWT_SECRET)
 
             // Get user from the token
-            const user = handleJSON.findByID(pathToUsers , decoded.id)
+            const user = await handleJSON.findByID(pathToUsers , decoded.id)
             
             delete user.password
             

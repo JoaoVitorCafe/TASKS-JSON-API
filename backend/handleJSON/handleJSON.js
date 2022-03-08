@@ -1,34 +1,91 @@
+const {readFile , writeFile } = require('fs/promises')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
+const path = require('path')
 
 module.exports = {
     // Check if a JSONfile exists , if not create
-    check(pathTo){
+    check(pathTo){ 
          
-        if (!(fs.existsSync(pathTo))) {
-            fs.writeFileSync(pathTo , JSON.stringify([]))
-        }
+        fs.access(pathTo , (err) => {
+            if(err) {
+                fs.writeFileSync(pathTo , JSON.stringify([]) ,'utf-8')
+            }
+
+        })
     },
 
     // Get all the data from the JSON file according to the name of file and its path.
-    get(pathTo) {
-        const data = JSON.parse(fs.readFileSync(pathTo ,'utf-8'))
-        return data
+    async getData(pathTo) {
+        this.check(pathTo)
+        
+        const data = await readFile(pathTo , "utf8")
+        
+        return JSON.parse(data)
     },
 
     // Get a specific data from the JSON file according to the name of file ,its path and id.
-    findByID(pathTo , id) {
-        const data = JSON.parse(fs.readFileSync(pathTo ,'utf-8'))
-        const specificData = data.find(elem => elem.id === id)
-        return specificData  
+    async findByID(pathTo , id) {
+        this.check(pathTo)
+        
+        const data = await this.getData(pathTo)
+        if(!id) return data
+
+        return data.find(elem => elem.id === id)
     } ,
 
     // Get a specific data from the JSON file according to the name of file ,its path and email.
-    findByEmail(pathTo , email) {
-        const data = JSON.parse(fs.readFileSync(pathTo ,'utf-8'))
-        const specificData = data.find(elem => elem.email === email)
-        return specificData  
+    async findByEmail(pathTo , email) {
+        this.check(pathTo)
+        
+        const users = await this.getData(pathTo)
+        if(!email) return users
+        
+        return users.find(elem => elem.email === email)
     } ,
+
+    // Create a new data pushing it to the JSON file
+    async createData(pathTo , data) {
+        this.check(pathTo)
+
+        const dataFile = await this.getData(pathTo)
+
+        dataFile.push(data)
+
+        await writeFile(pathTo , JSON.stringify(dataFile))
+        
+        return data
+    } ,
+
+    // Update a data in JSON file
+    async updateData(pathTo , id , updatedData) {
+        this.check(pathTo)
+
+        const totalData = await this.getData(pathTo)
+
+        const index = totalData.findIndex(data => data.id === id)
+       
+        totalData[index] = updatedData;
+
+        await writeFile(pathTo , JSON.stringify(totalData))
+
+        return updatedData;
+    } , 
+
+    // Delete data from JSON file
+    async deleteData(pathTo , id) {
+        this.check(pathTo)
+
+        const totalData = await this.getData(pathTo)
+        
+        const index = totalData.findIndex(data => data.id === id)
+
+        const deletedData = totalData.splice(index , 1)[0]
+
+        await writeFile(pathTo, JSON.stringify(totalData))
+
+        return deletedData;
+    } , 
 
     // Generate a ID
     generateID(){
