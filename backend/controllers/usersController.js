@@ -1,7 +1,8 @@
 const path = require('path')
 const handleJSON = require('../handleJSON/handleJSON')
 const pathToUsers = path.join(__dirname , '../users.json')
-const { generateToken} = require('../middleware/authMiddleware') 
+const { generateToken} = require('../middleware/authMiddleware')
+const bcrypt = require('bcryptjs') 
 
 module.exports = {
     
@@ -16,6 +17,10 @@ module.exports = {
             return res.status(400).json("Please add all fields")
         }
 
+        // Hash password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password , salt)
+
         const userExists = await handleJSON.findByEmail(pathToUsers , email)
         
         if(userExists) {
@@ -25,7 +30,7 @@ module.exports = {
         const user = { id : handleJSON.generateID() ,
             name ,
             email ,
-            password,
+            password : hashedPassword,
         }
 
        await handleJSON.createData(pathToUsers , user)
@@ -46,7 +51,7 @@ module.exports = {
 
         const user = await handleJSON.findByEmail(pathToUsers , email)
 
-        if(user && (user.password == password)) {
+        if(user && (await bcrypt.compare(password , user.password))) {
             res.status(200).json({...user , token : generateToken(user.id)})
         } else {
             res.status(400).json("Email or password incorrect")
