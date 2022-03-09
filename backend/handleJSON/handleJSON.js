@@ -5,14 +5,10 @@ const path = require('path')
 
 module.exports = {
     // Check if a JSONfile exists , if not create
-    check(pathTo){ 
-         
-        fs.access(pathTo , (err) => {
-            if(err) {
-                fs.writeFileSync(pathTo , JSON.stringify([]) ,'utf-8')
-            }
-
-        })
+    check(pathTo){
+        if (!(fs.existsSync(pathTo))) {
+            fs.writeFileSync(pathTo , JSON.stringify([]))
+        }
     },
 
     // Get all the data from the JSON file according to the name of file and its path.

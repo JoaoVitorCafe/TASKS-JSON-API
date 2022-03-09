@@ -12,9 +12,9 @@
 
 ### JSON file
 
-- In this application , all the data is stored into JSON files
-- The tasks are located in the ``` tasks.json``` file
-- The users are located in the ``` users.json``` file
+- In this application , all the data is stored into JSON files.
+- The tasks are located in the ``` tasks.json``` file.
+- The users are located in the ``` users.json``` file.
 - The file will be created automatically when you start the server.
 - Do not delete all the content present in ``` tasks.json``` or ``` users.json``` . In order to the API to work both files must have at least an empty array.
 
@@ -55,13 +55,13 @@
     "id":"4l3jjz9s",
     "name":"John",
     "email":"John@gmail.com",
-    "password":"123456"
+    "password":"$2a$10$IU2ZoeRn2Kp.Kxa./maTvum6KA4M/JEWlAPVkNteOqZa55Dqv29.C"
     },
     {
     "id":"j4gyxbws",
     "name":"Sarah",
     "email":"sarah@gmail.com",
-    "password":"123456"
+    "password":"$2a$10$oYsUfxewAJKq2FT75ETDWOnwwK6.G3reb1hhIt8CbUTx74T1FsHuy"
     }
   ]
 ```
@@ -81,7 +81,7 @@ The API is structured in certain folders.
 ### Authentication
 - The authentication is based on JSON Web Tokens. So everytime you register a user or login, a token will be generated. This token will allow you to:
 ```
-Get informations about the own currently user
+Get informations about the  currently logged user
 ```
 
 ```
