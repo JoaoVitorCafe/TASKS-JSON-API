@@ -13,15 +13,13 @@ module.exports = {
         const {name , email , password} = req.body
 
         if(!name || !email || !password) {
-            res.status(400)
-            throw new Error("Please add all fields")
+            return res.status(400).json("Please add all fields")
         }
 
         const userExists = await handleJSON.findByEmail(pathToUsers , email)
         
         if(userExists) {
-            res.status(400)
-            throw new Error("User already exists")
+            return res.status(400).json("User already exists")
         }
         
         const user = { id : handleJSON.generateID() ,
@@ -43,8 +41,7 @@ module.exports = {
         const { email , password} = req.body
 
         if(!email || !password) {
-            res.status(400)
-            throw new Error("Please add all fields")
+            return res.status(400).json("Please add all fields")
         }
 
         const user = await handleJSON.findByEmail(pathToUsers , email)
@@ -52,8 +49,7 @@ module.exports = {
         if(user && (user.password == password)) {
             res.status(200).json({...user , token : generateToken(user.id)})
         } else {
-            res.status(400)
-            throw new Error("Email or password incorrect")
+            res.status(400).json("Email or password incorrect")
         }     
     } ,
 

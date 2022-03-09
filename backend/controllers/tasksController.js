@@ -13,13 +13,11 @@ module.exports = {
         const task =  await handleJSON.findByID(pathToData, id)
 
         if(!task) {
-            res.status(404)
-            throw new Error("Task not found")
+            return res.status(404).json("Task not found")
         }
 
         if(task.user !== req.user.id){
-            res.status(401)
-            throw new Error("You're not authorized to get this task")
+            return res.status(401).json("You're not authorized to get this task")
         }
 
             
@@ -44,8 +42,7 @@ module.exports = {
         const {description , due} = req.body
 
         if(!description || !due) {
-            res.status(400)
-            throw new Error("Fill in all fields")
+            return res.status(400).json("Fill in all fields")
         }
         
         const newTask = {user : req.user.id , id : handleJSON.generateID() , description , due , status : "In progress"}
@@ -63,13 +60,11 @@ module.exports = {
         const task = await handleJSON.findByID(pathToData,id)
         
         if(!task) {
-            res.status(404)
-            throw new Error("Task not found")
+            return res.status(404).json("Task not found")
         }
 
         if(task.user !== req.user.id) {
-            res.status(401)
-            throw new Error("You're unauthorized to update this task")
+            return res.status(401).json("You're unauthorized to update this task")
         }
         
         const { description , due} = req.body
@@ -89,13 +84,11 @@ module.exports = {
         const task = await handleJSON.findByID(pathToData , id)
         
         if(!task) {
-            res.status(404)
-            throw new Error("Task not found")
+            return res.status(404).json("Task not found")
         }
 
         if(task.user !== req.user.id) {
-            res.status(401)
-            throw new Error("You're unauthorized to update this task")
+            return res.status(401).json("You're unauthorized to update this task")
         }
         
         const deletedTask = await handleJSON.deleteData(pathToData , id)
